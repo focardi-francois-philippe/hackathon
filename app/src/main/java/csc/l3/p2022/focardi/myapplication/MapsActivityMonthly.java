@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -57,8 +58,10 @@ public class MapsActivityMonthly extends FragmentActivity implements OnMapReadyC
         //String year = intent.getStringExtra("year");
         //year = Integer.parseInt(intent.getStringExtra("year")); //if it's a string you stored.
         Bundle bundle = getIntent().getExtras();
+
         year = bundle.getInt("year");
         System.out.println(year);
+
 
         binding = ActivityMapsMonthlyBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -95,12 +98,14 @@ public class MapsActivityMonthly extends FragmentActivity implements OnMapReadyC
             Toast.makeText(MapsActivityMonthly.this, "Problem reading list of locations.", Toast.LENGTH_LONG).show();
             //System.out.println("Erreur");
         }
+
+        int red = 255 -  55;
         int[] colors = {
                 Color.rgb(102, 225, 0), // green
-                Color.rgb(255, 0, 0)    // red
+                Color.rgb(red, 0, 0)    // red
         };
         float[] startPoints = {
-                0.2f, 1f
+                0.8f, 1f
         };
 
         Gradient gradient = new Gradient(colors, startPoints);
@@ -108,10 +113,14 @@ public class MapsActivityMonthly extends FragmentActivity implements OnMapReadyC
         // Create a heat map tile provider, passing it the latlngs of the police stations.
         HeatmapTileProvider.Builder provider = new HeatmapTileProvider.Builder();
         HeatmapTileProvider provider2;
+
         provider.weightedData(soleil);
+        provider.gradient(gradient);
+        //provider.opacity(0.0001);
         //provider.data(latLngs);
         provider2 =  provider.build();
         provider2.setRadius(RADIUSHEATMAP);
+        //provider2.setOpacity(0.1);
         // Add a tile overlay to the map, using the heat map tile provider&
         TileOverlay overlay = mMap.addTileOverlay(new TileOverlayOptions().tileProvider(provider2));
     }
@@ -127,7 +136,7 @@ public class MapsActivityMonthly extends FragmentActivity implements OnMapReadyC
 
         JSONObject jsonObject = new JSONObject(json);
         JSONArray array = jsonObject.getJSONArray("features");
-        final int NBRPOINTS = 2;//array.length()
+        final int NBRPOINTS = array.length();
         for (int i = 0; i < NBRPOINTS; i++) {
             JSONObject object = array.getJSONObject(i);
             JSONArray coordonnees = object.getJSONObject("geometry").getJSONArray("coordinates");

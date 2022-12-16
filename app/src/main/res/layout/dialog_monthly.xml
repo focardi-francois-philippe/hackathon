@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="wrap_content"
+    android:padding="20dp">
+    <TextView
+        android:id="@+id/textViewAnneeHist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Historique des Années passées"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        tools:ignore="MissingConstraints" />
 
     <Spinner
         android:id="@+id/SpnYear"
-        android:layout_width="134dp"
-        android:layout_height="55dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.177"
-        app:layout_constraintStart_toEndOf="@+id/SpnMonth"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="154dp"></Spinner>
+        android:layout_width="171dp"
+        android:layout_height="48dp"
+        android:textAlignment="center"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/textViewAnneeHist"
+        tools:ignore="MissingConstraints"></Spinner>
 
-   <!-- <Spinner
-        android:id="@+id/SpnMonth"
-        android:layout_width="131dp"
-        android:layout_height="54dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.275"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteY="154dp"></Spinner>!-->
-
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/SpnYear"
+        android:layout_marginTop="15dp"
+        android:weightSum="2">
     <Button
         android:id="@+id/btnAnnulerDialogMonthly"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
+        android:layout_weight="1"
         android:text="Annuler"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.286"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SpnMonth"
+
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/btnValiderDialogMonthly"
-        android:layout_width="99dp"
-        android:layout_height="52dp"
-        android:layout_marginStart="39dp"
-        android:layout_marginTop="28dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="Valider"
-        app:layout_constraintStart_toEndOf="@+id/btnAnnulerDialogMonthly"
-        app:layout_constraintTop_toBottomOf="@+id/SpnYear"
+        android:layout_weight="1"
         tools:ignore="MissingConstraints" />
+    </LinearLayout>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

@@ -3,10 +3,7 @@ package csc.l3.p2022.focardi.myapplication;
 import static java.lang.Math.abs;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -16,18 +13,15 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RawRes;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -54,9 +48,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Scanner;
 
 import csc.l3.p2022.focardi.myapplication.databinding.ActivityMapsBinding;
 
@@ -149,9 +141,9 @@ public  static int REQUEST_CODE = 100;
                 dialog.setCancelable(true);
                 dialog.setView(R.layout.dialog_periode);*/
                 datePickerPeriod = dialog.findViewById(R.id.date_dialog);
-                spinnerHeure = dialog.findViewById(R.id.SpnHeure);
-                spinnerMinutes = dialog.findViewById(R.id.SpnMinute);
-                String[] itemsHeure = new String[24];
+               //spinnerHeure = dialog.findViewById(R.id.SpnHeure);
+                //spinnerMinutes = dialog.findViewById(R.id.SpnMinute);
+               /* String[] itemsHeure = new String[24];
                 String[] itemsMinutes = new String[60];
                 for (int i = 0;i<24;i++)
                 {
@@ -177,11 +169,11 @@ public  static int REQUEST_CODE = 100;
                     }
                 }
 
-                ArrayAdapter<String> adapterHeure = new ArrayAdapter<String>(dialog.getContext(), android.R.layout.simple_spinner_dropdown_item, itemsHeure);
-                ArrayAdapter<String> adapterMinutes = new ArrayAdapter<String>(dialog.getContext(), android.R.layout.simple_spinner_dropdown_item, itemsMinutes);
-
-                spinnerHeure.setAdapter(adapterHeure);
-                spinnerMinutes.setAdapter(adapterMinutes);
+                //ArrayAdapter<String> adapterHeure = new ArrayAdapter<String>(dialog.getContext(), android.R.layout.simple_spinner_dropdown_item, itemsHeure);
+                //ArrayAdapter<String> adapterMinutes = new ArrayAdapter<String>(dialog.getContext(), android.R.layout.simple_spinner_dropdown_item, itemsMinutes);
+*/
+                //spinnerHeure.setAdapter(adapterHeure);
+                //spinnerMinutes.setAdapter(adapterMinutes);
                 Button btnAnnuler = dialog.findViewById(R.id.btnAnnulerDialog);
                 Button btnValider = dialog.findViewById(R.id.btnValiderDialog);
                 btnAnnuler.setOnClickListener(new View.OnClickListener() {
@@ -209,13 +201,37 @@ public  static int REQUEST_CODE = 100;
                 dialog.setContentView(R.layout.dialog_conso);
                 dialog.setTitle("Ajouter consomation");
                 Button btnValiderConso = dialog.findViewById(R.id.btnValiderConso);
+                Button BubtnAnnulerConso = dialog.findViewById(R.id.btnAnnulerConso);
 
                 btnValiderConso.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         EditText editTextConso = dialog.findViewById(R.id.edit_text_conso);
                         int conso = Integer.parseInt(editTextConso.getText().toString());
+                        TextView nbrPanneau = dialog.findViewById(R.id.nbrPanneaux);
+                        TextView TwconsoMensuel = dialog.findViewById(R.id.consoMensuel);
+                        Getapi consoApi = new Getapi(latitude,longitude);
+                        double prixKwH = 0.174;
+                        int budgetMensuel = (int) (conso * prixKwH);
+                        double consoMensuel = conso/12;
+                        int nbrPanneauxOscaro = 0;
+                        TwconsoMensuel.setText("Consommation mensuel :" + consoMensuel + "kW/h" );
+                        consoApi.urlapi = "https://dimensionneur.oscaro-power.com/req_tab?budget="+budgetMensuel+"&lat="+latitude+"&lng="+longitude+"&pays=fr&angle="+angle+"&orientation="+z;
+                        consoApi.start();
 
+                        try {
+                            consoApi.join();
+                            nbrPanneauxOscaro = tojsonConso(consoApi.reponseApi.substring(4));
+                            nbrPanneau.setText("Nombre de panneau solaire conseillé :" + nbrPanneauxOscaro);
+                        } catch (InterruptedException | JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                BubtnAnnulerConso.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        dialog.cancel();
                     }
                 });
                 dialog.show();
@@ -296,7 +312,7 @@ public  static int REQUEST_CODE = 100;
                 try {
                     gps.join();
                     irradiationCourante= tojson(gps.reponseApi.substring(4));
-                    Toast.makeText(MapsActivity.this, String.valueOf(irradiationCourante), Toast.LENGTH_LONG).show();
+                    Toast.makeText(MapsActivity.this, "Localisation récuperée", Toast.LENGTH_SHORT).show();
                 } catch (InterruptedException | JSONException e) {
                     e.printStackTrace();
                 }
@@ -315,14 +331,9 @@ public  static int REQUEST_CODE = 100;
 
                                 latitude = location.getLatitude();
                                 longitude = location.getLongitude();
-
-
                             }
-
                         }
                     });
-
-
         }else
         {
 
@@ -391,7 +402,7 @@ public  static int REQUEST_CODE = 100;
 
         JSONObject jsonObject = new JSONObject(json);
         JSONArray array = jsonObject.getJSONArray("features");
-        final int NBRPOINTS = 2;//array.length()
+        final int NBRPOINTS = 2;//array.length();
         for (int i = 0; i < NBRPOINTS; i++) {
             JSONObject object = array.getJSONObject(i);
             JSONArray coordonnees = object.getJSONObject("geometry").getJSONArray("coordinates");
@@ -434,6 +445,18 @@ public  static int REQUEST_CODE = 100;
         double result = somme/heures.length()-1;
 
         return(result);
+
+    }
+    public int tojsonConso(String futurJson) throws JSONException {
+
+        double somme = 0;
+        JSONObject jsonObject = new JSONObject(futurJson);
+        //JSONObject power_sélection = jsonObject.getInt("power_sélection");
+
+        //JSONArray heures = array.getJSONArray("hourly");
+
+
+        return(jsonObject.getInt("solar_sélection"));
 
     }
 

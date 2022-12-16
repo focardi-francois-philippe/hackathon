@@ -3,10 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/franc/AndroidStudioProjects/MyApplication2/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.1421875" />
         <entry key="..\:/Users/franc/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_maps.xml" value="0.152" />
         <entry key="..\:/Users/franc/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/activity_maps_monthly.xml" value="0.12604166666666666" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/dialog_conso.xml" value="0.12708333333333333" />
-        <entry key="..\:/Users/franc/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/dialog_monthly.xml" value="0.25" />
+        <entry key="..\:/Users/franc/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/dialog_conso.xml" value="0.2" />
+        <entry key="..\:/Users/franc/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/dialog_monthly.xml" value="0.1" />
         <entry key="..\:/Users/franc/AndroidStudioProjects/MyApplication2/app/src/main/res/layout/dialog_periode.xml" value="0.2" />
       </map>
     </option>
